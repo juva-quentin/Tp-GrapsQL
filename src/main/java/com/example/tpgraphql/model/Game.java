@@ -1,11 +1,46 @@
 package com.example.tpgraphql.model;
 
-public class Game {
-    private String id;
-    private String title;
-    private String description;
-    private String publicationDate;
-    private Editor editor;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-    // Getters, Setters, Constructors
+
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+public class Game {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @ElementCollection
+    private List<String> genres;
+
+    private Long publicationDate;
+
+    @ManyToMany
+    @JoinTable(
+            name = "game_editor",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "editor_id")
+    )
+    private List<Editor> editors;
+
+    @ManyToMany
+    @JoinTable(
+            name = "game_studio",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "studio_id")
+    )
+    private List<Studio> studios;
+
+    @ElementCollection
+    private List<String> platforms;
+
+    // Getters et Setters
 }

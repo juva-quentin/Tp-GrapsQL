@@ -1,15 +1,26 @@
 package com.example.tpgraphql.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import com.coxautodev.graphql.tools.GraphQLResolver;
+import com.example.tpgraphql.model.Editor;
+import com.example.tpgraphql.model.Game;
+import com.example.tpgraphql.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class EditorResolver implements GraphQLQueryResolver {
-    private final EditorService editorService;
+import java.util.Collections;
+import java.util.List;
 
-    @Autowired
-    public EditorResolver(EditorService editorService) {
-        this.editorService = editorService;
+@Component
+public class EditorResolver implements GraphQLResolver<Editor> {
+
+    private final GameService gameService;
+
+    public EditorResolver(GameService gameService) {
+        this.gameService = gameService;
     }
 
-    // Query methods (e.g., games(), game(id))
+    public List<Game> games(Editor editor) {
+        return gameService.findGamesByEditor(editor);
+    }
 }
