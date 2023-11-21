@@ -16,8 +16,8 @@ public class Editor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToMany
-    @JoinTable(name = "editor_game", joinColumns = @JoinColumn(name = "editor_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))
+
+    @ManyToMany(mappedBy = "editors")
     private List<Game> games;
 
     // Getters et Setters

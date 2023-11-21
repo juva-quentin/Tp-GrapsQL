@@ -14,8 +14,8 @@ public class Studio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToMany
-    @JoinTable(name = "studio_game", joinColumns = @JoinColumn(name = "studio_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))
+
+    @ManyToMany(mappedBy = "studios")
     private List<Game> games;
 
     // Getters et Setters

@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface EditorRepository extends JpaRepository<Editor, Long> {
-    List<Editor> findEditorsByGames(Game game);
 }

@@ -2,7 +2,11 @@ package com.example.tpgraphql.service;
 
 import com.example.tpgraphql.model.Game;
 import com.example.tpgraphql.model.Studio;
+import com.example.tpgraphql.model.Studios;
 import com.example.tpgraphql.repository.StudioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,27 +17,28 @@ import java.util.Optional;
 @Service
 public class StudioService {
 
-    private final StudioRepository studioRepository;
+    @Autowired
+    private StudioRepository studioRepository; // Remplacer par votre repository de studios
 
-    public StudioService(StudioRepository studioRepository) {
-        this.studioRepository = studioRepository;
+    private static final int DEFAULT_PAGE_SIZE = 10; // Taille de page par défaut
+
+    public Studios getStudios(Integer page) {
+        // Utilise la taille de page par défaut si 'size' n'est pas fourni
+        PageRequest pageRequest = PageRequest.of(page, DEFAULT_PAGE_SIZE);
+        Page<Studio> studioPage = studioRepository.findAll(pageRequest);
+
+        Studios studiosWrapper = new Studios();
+        studiosWrapper.setResults(studioPage.getContent());
+        // Set additional info like total pages, current page, etc.
+
+        return studiosWrapper;
     }
 
-    @Transactional(readOnly = true)
-    public List<Studio> findAllStudios() {
-        return studioRepository.findAll();
+    public Studio getStudioById(String id) {
+        // Logique pour récupérer un studio par son ID
+        Optional<Studio> studio = studioRepository.findById(Long.valueOf(id));
+        return studio.orElse(null);
     }
 
-    @Transactional(readOnly = true)
-    public Optional<Studio> findStudioById(Long id) {
-        return Optional.ofNullable(studioRepository.findById(id).orElse(null));
-    }
-
-    @Transactional(readOnly = true)
-    public List<Studio> findStudiosByGame(Game game) {
-        if (game == null) {
-            return Collections.emptyList();
-        }
-        return studioRepository.findStudiosByGames(game);
-    }
+    // Ajoutez d'autres méthodes selon les besoins, par exemple pour créer, mettre à jour ou supprimer des studios
 }

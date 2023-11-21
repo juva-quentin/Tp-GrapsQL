@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface StudioRepository extends JpaRepository<Studio, Long> {
-    List<Studio> findStudiosByGames(Game game);
+
 }
