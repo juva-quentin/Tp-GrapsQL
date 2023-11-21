@@ -18,12 +18,24 @@ public class Game {
     @ElementCollection
     private List<String> genres;
     private Long publicationDate;
-    @ManyToMany(mappedBy = "games")
+
+    @ManyToMany
+    @JoinTable(
+            name = "game_editor",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "editor_id")
+    )
     private List<Editor> editors;
-    @ManyToMany(mappedBy = "games")
+
+    @ManyToMany
+    @JoinTable(
+            name = "game_studio",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "studio_id")
+    )
     private List<Studio> studios;
+
     @ElementCollection
     private List<String> platform;
 
-    // Getters et Setters
 }
