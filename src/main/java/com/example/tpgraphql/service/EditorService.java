@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EditorService {
@@ -24,8 +25,8 @@ public class EditorService {
     }
 
     @Transactional(readOnly = true)
-    public Editor findEditorById(Long id) {
-        return editorRepository.findById(id).orElse(null);
+    public Optional<Editor> findEditorById(Long id) {
+        return Optional.ofNullable(editorRepository.findById(id).orElse(null));
     }
 
     @Transactional(readOnly = true)

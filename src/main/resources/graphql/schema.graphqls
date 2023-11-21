@@ -1,0 +1,59 @@
+type Query {
+    games(page: Int, genre: String, platform: String, studio: String): Games
+    game(id: ID!): Game
+    editors(page: Int): Editors
+    editor(id: ID!): Editor
+    studios(page: Int): Studios
+    studio(id: ID!): Studio
+}
+
+type Game {
+    id: ID
+    name: String!
+    genres: [String!]!
+    publicationDate: Int
+    editors: [Editor!]!
+    studios: [Studio!]!
+    platform: [String!]!
+}
+
+type Editor {
+    id: ID
+    name: String!
+    games: [Game]
+}
+
+type Studio {
+    id: ID
+    name: String!
+    games: [Game]
+}
+
+type Games {
+    infos: Info
+    results: [Game]
+}
+
+type Editors {
+    infos: Info
+    results: [Editor]
+}
+
+type Studios {
+    infos: Info
+    results: [Studio]
+}
+
+type Info {
+    currentPage: Int
+    totalPages: Int
+    totalResults: Int
+}
+
+type Mutation {
+    createGame(name: String!, genres: [String!]!, publicationDate: Int, editorIds: [ID!], studioIds: [ID!], platform: [String!]!): Game
+}
+
+
+
+

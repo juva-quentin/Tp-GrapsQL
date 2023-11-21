@@ -14,33 +14,16 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private String name;
-
     @ElementCollection
     private List<String> genres;
-
     private Long publicationDate;
-
-    @ManyToMany
-    @JoinTable(
-            name = "game_editor",
-            joinColumns = @JoinColumn(name = "game_id"),
-            inverseJoinColumns = @JoinColumn(name = "editor_id")
-    )
+    @ManyToMany(mappedBy = "games")
     private List<Editor> editors;
-
-    @ManyToMany
-    @JoinTable(
-            name = "game_studio",
-            joinColumns = @JoinColumn(name = "game_id"),
-            inverseJoinColumns = @JoinColumn(name = "studio_id")
-    )
+    @ManyToMany(mappedBy = "games")
     private List<Studio> studios;
-
     @ElementCollection
-    private List<String> platforms;
+    private List<String> platform;
 
     // Getters et Setters
 }

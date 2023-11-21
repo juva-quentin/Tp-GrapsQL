@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudioService {
@@ -24,8 +25,8 @@ public class StudioService {
     }
 
     @Transactional(readOnly = true)
-    public Studio findStudioById(Long id) {
-        return studioRepository.findById(id).orElse(null);
+    public Optional<Studio> findStudioById(Long id) {
+        return Optional.ofNullable(studioRepository.findById(id).orElse(null));
     }
 
     @Transactional(readOnly = true)

@@ -6,7 +6,9 @@ import com.example.tpgraphql.model.Editor;
 import com.example.tpgraphql.model.Game;
 import com.example.tpgraphql.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,13 +16,9 @@ import java.util.List;
 @Component
 public class EditorResolver implements GraphQLResolver<Editor> {
 
-    private final GameService gameService;
-
-    public EditorResolver(GameService gameService) {
-        this.gameService = gameService;
-    }
-
+    @QueryMapping
     public List<Game> games(Editor editor) {
-        return gameService.findGamesByEditor(editor);
+
+        return editor.getGames();
     }
 }

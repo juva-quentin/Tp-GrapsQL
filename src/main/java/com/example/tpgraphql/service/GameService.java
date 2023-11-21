@@ -3,7 +3,9 @@ package com.example.tpgraphql.service;
 import com.example.tpgraphql.model.Editor;
 import com.example.tpgraphql.model.Game;
 import com.example.tpgraphql.model.Studio;
+import com.example.tpgraphql.repository.EditorRepository;
 import com.example.tpgraphql.repository.GameRepository;
+import com.example.tpgraphql.repository.StudioRepository;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,9 +23,14 @@ import java.util.List;
 public class GameService {
 
     private final GameRepository gameRepository;
+    private final EditorRepository editorRepository;
+    private final StudioRepository studioRepository;
 
-    public GameService(GameRepository gameRepository) {
+    @Autowired
+    public GameService(GameRepository gameRepository, EditorRepository editorRepository, StudioRepository studioRepository) {
         this.gameRepository = gameRepository;
+        this.editorRepository = editorRepository;
+        this.studioRepository = studioRepository;
     }
 
     @Transactional(readOnly = true)
@@ -32,8 +39,8 @@ public class GameService {
     }
 
     @Transactional(readOnly = true)
-    public Game findGameById(Long id) {
-        return gameRepository.findById(id).orElse(null);
+    public Optional<Game> findGameById(Long id) {
+        return Optional.ofNullable(gameRepository.findById(id).orElse(null));
     }
 
     @Transactional(readOnly = true)
@@ -64,6 +71,31 @@ public class GameService {
         }
         return gameRepository.findGamesByEditors(editor);
     }
+
+    @Transactional
+    public Game createGame(String name, List<String> genres, Long publicationDate, List<Long> editorIds, List<Long> studioIds, List<String> platform) {
+        Game game = new Game();
+        game.setName(name);
+        game.setGenres(genres);
+        game.setPublicationDate(publicationDate);
+        game.setPlatform(platform);
+        System.out.println("Creating game with name: " + name);
+        // Récupérer les éditeurs et les studios par leurs identifiants
+        List<Editor> editors = new ArrayList<>();
+        for (Long id : editorIds) {
+            editorRepository.findById(id).ifPresent(editors::add);
+        }
+        game.setEditors(editors);
+
+        List<Studio> studios = new ArrayList<>();
+        for (Long id : studioIds) {
+            studioRepository.findById(id).ifPresent(studios::add);
+        }
+        game.setStudios(studios);
+
+        return gameRepository.save(game);
+    }
+
 
     @Transactional(readOnly = true)
     public List<Game> findGamesByStudio(Studio studio) {
